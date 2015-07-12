@@ -1,79 +1,73 @@
 require 'minitest/autorun'
-require './classes/program.rb'
-require './classes/user.rb'
-require './classes/machine.rb'
 
-class TestUser < MiniTest::Unit::TestCase
+require_relative './user.rb'
+require_relative './assignment.rb'
+
+class TestUser < Minitest::Test
   def setup
-    @user = User.new
-    @user.balance = 200
-    @amount = 50
+    @user = User.new("test_username", "test_pin", 500)
   end
 
-  def test_can_user_withdraw
-    assert_equal true, @user.can_withdraw?(@amount)
-  end
-   def test_has_enough_money
-     assert_equal true, @user.balance >= @amount
-   end
-   def test_amount_more_than_zero
-     amount = 0
-     assert_equal false, @user.can_withdraw?(amount)
-   end
-   def test_amount_equals_fixnum
-     amount = ""
-     assert_equal false, @user.can_withdraw?(amount)
-   end
-  def test_deduct_works
-    assert_equal (@user.balance - @amount), @user.deduct(@amount)
-  end
-end
 
-class TestMachine < MiniTest::Unit::TestCase
-  def setup
-    @machine = Machine.new
-    @machine.balance = 200
-    @amount = 50
+  def test_full_name_works
+    @user.first = "test_first"
+    @user.last = "test_last"
+    assert_equal "test_first test_last", @user.full_name
   end
 
-  def test_can_user_withdraw
-    assert_equal true, @machine.can_withdraw?(@amount)
-  end
-   def test_has_enough_money
-     assert_equal true, @machine.balance >= @amount
-   end
-   def test_amount_more_than_zero
-     amount = 0
-     assert_equal false, @machine.can_withdraw?(amount)
-   end
-   def test_amount_equals_fixnum
-     amount = ""
-     assert_equal false, @machine.can_withdraw?(amount)
-   end
-  def test_deduct_works
-    assert_equal (@machine.balance - @amount), @machine.deduct(@amount)
-    #new_balance == @balance - amount
-  end
-end
-
-class TestProgram < MiniTest::Unit::TestCase
-  def setup do
-    atm = Machine.new
-    atm.balance = 100000
-    @p = Program.new
+  def test_full_name_without_last
+    @user.first = "test_first"
+    @user.last = ""
+    assert_equal "test_first", @user.full_name
   end
 
-  def test_login_name
-    login = {}
-    @p.stub(:chomp, "Jamie") do
-      login = @p.get_login_info
-    end
-    assert_equal "Jamie", login[:name]
-    assert_equal "Jamie", login[:pin]
-    end
-  # def test_get_input
-  #     assert_equal "hi", TestDef.stub(:gets, -> {"hi"})
-  # end
-  def test_withdraw_works
-    var = @
+  def test_full_name_without_last
+    @user.first = ""
+    @user.last = "test_last"
+    assert_equal "test_username", @user.full_name
+  end
+
+  def test_full_name_without_first_or_last
+    @user.first = ""
+    @user.last = ""
+    assert_equal "test_username", @user.full_name
+  end
+
+  def test_check_balace
+    assert_equal 500, @user.balance
+  end
+
+  def test_update_balance
+    @user.update_balance(:-, 300)
+    assert_equal 200, @user.balance
+  end
+
+  # program tests
+  # =============
+
+  def test_prompt_user
+    skip()
+  end
+
+  def test_no_empty_input
+    skip()
+  end
+
+  def test_fetch_user
+    # accounts_array = [{username: "test_username", pin: 1234}, {username: "test_user2", pin: 3456}]
+    # assert_equal "test_username" "1234", true
+    skip()
+  end
+
+  def test_get_requested_amount_pos
+    skip()
+  end
+
+  def test_get_requested_amount_neg
+    skip()
+  end
+
+  def test_action_selection
+    skip()
+  end
 end
